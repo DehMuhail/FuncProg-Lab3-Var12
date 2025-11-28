@@ -1,13 +1,16 @@
-Це простий тестовий текст. Тут є слова: "Кіт," "будинок", "apple," і more words!
+Сьогодні був дуже сильний вітер, а студент сказав: "Я сказав 'привіт-світ' і пішов читати підручник". 
+Він бачив слово "пів-Європи", а також фразу: "об'єкт", "п'ять", "з'єднання" — усе це має апострофи.
+На столі лежала книга, поруч — аркуш з написом: "long-word-test", 'multi-layer-value', та інші "строкові-величини".
 
-Перевіряємо: Брама, Коса, стіл, стежка, юність, Єнот.
+Today the student said: "I wrote 'edge-case', 'self-check', and 'well-being' on the board". 
+A small cat jumped on the windowsill and meowed: "It's a mid-test... or maybe a stress-test!".
+The phrase "re-enter", 'co-operate', "it's", "they're", and "John's-book" contains apostrophes, hyphens, and mixed punctuation.
 
-А тепер дивимось на пунктуацію:
-Привіт, друже! Як справи? Все добре... Сподіваюся :)
+Тут є слова з дефісами типу: над-звичайний, над-складний, нейро-мережа, супер-мега-гіпер-тест.
+Є слова в лапках, наприклад: "слово,", "тест...", "гіпер-слово". 
+Також є послідовності пробілів:    ось     тут     багато     пробілів.    А тут табуляція:			бачиш?
 
-Англійські слова теж тут:
-Test, Strong, apple, table! Orange?
+In English, we also test: "re-starting,", "long-long-long-word...", "coder's-life", "anti-virus-test", 
+and tricky cases like: "value,", 'test-case.', "multi-test", "it's...", "she-said:"hello"'.
 
-Перевірка табів	і   багатьох     пробілів.
-
-Кінець тесту.
+Ось фінальне речення: "кіт-при-справі", 'пес-на-зв'язку', "день-на-рекорді" — для перевірки всього функціоналу.

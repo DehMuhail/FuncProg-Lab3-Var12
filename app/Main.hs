@@ -3,71 +3,64 @@ module Main where
 import Data.Char (isLetter, toLower, isSpace)
 import System.IO
 
-
-type Symbol = Char
 type TxtWord = String
-type Sentence = [TxtWord]
 
+-- Ukrainian + English vowels
 isVowel :: Char -> Bool
-isVowel c = toLower c `elem` "aeiouаеєиіїоуюя"
+isVowel c = toLower c `elem`
+    "aeiouаеєиіїоуюя"
 
+-- Consonant = letter that is not vowel
 isConsonant :: Char -> Bool
 isConsonant c = isLetter c && not (isVowel c)
 
-shouldDelete :: Int -> TxtWord -> Bool
+-- Check if a character is part of a complex word
+-- Letters, apostrophes, hyphens count as "in-word"
+isWordChar :: Char -> Bool
+isWordChar c = isLetter c || c == '\'' || c == '-'
+
+-- Extract only letters for length logic
+lettersOnly :: String -> String
+lettersOnly = filter isLetter
+
+-- Determine if a word should be deleted
+shouldDelete :: Int -> String -> Bool
 shouldDelete n w =
-    let letters = filter isLetter w
-        len = length letters
-    in len == n
-        && not (null letters)
-        && isConsonant (head letters)
+    let clean = lettersOnly w
+        len   = length clean
+    in  len == n
+        && not (null clean)
+        && isConsonant (head clean)
 
-
-normalizeSpaces :: String -> String
-normalizeSpaces = unwords . words . map (\c -> if isSpace c then ' ' else c)
-
-processLine :: Int -> String -> String
-processLine n line =
-    let parts = splitPreservingPunctuation line
-        kept  = [ p | p <- parts, not (shouldDelete n p) ]
-    in joinTokens kept
-
-splitPreservingPunctuation :: String -> [String]
-splitPreservingPunctuation [] = []
-splitPreservingPunctuation (c:cs)
-    | isLetter c =
-        let (letters, rest) = span isLetter cs
-        in (c:letters) : splitPreservingPunctuation rest
-
-    | isPunctuationChar c =
-        [ [c] ] ++ splitPreservingPunctuation cs
+-- Tokenize text into:
+-- [word-with-hyphens/apostrophes, punctuation, spaces]
+tokenize :: String -> [String]
+tokenize [] = []
+tokenize s@(c:cs)
+    | isWordChar c =
+        let (w, rest) = span isWordChar s
+        in w : tokenize rest
 
     | isSpace c =
-        splitPreservingPunctuation cs
+        let (sp, rest) = span isSpace s
+        in sp : tokenize rest
 
     | otherwise =
-        [ [c] ] ++ splitPreservingPunctuation cs
+        [ [c] ] ++ tokenize cs
 
-isPunctuationChar :: Char -> Bool
-isPunctuationChar c = c `elem` ".,?!:;\"'()[]{}-–…"
-
-
-joinTokens :: [String] -> String
-joinTokens = go True
+-- Process tokens, removing complex words when needed
+processTokens :: Int -> [String] -> [String]
+processTokens n = map remove
   where
-    go _ [] = ""
-    go isStart (t:ts)
-        | null t = go isStart ts
-        | isPunctuationToken t =
-            t ++ go False ts
-        | isStart =
-            t ++ go False ts
-        | otherwise =
-            " " ++ t ++ go False ts
+    remove t
+        | all isSpace t = t
+        | all isWordChar t =
+            if shouldDelete n t then "" else t
+        | otherwise = t
 
-isPunctuationToken :: String -> Bool
-isPunctuationToken [c] = isPunctuationChar c
-isPunctuationToken _   = False
+-- Rebuild the full text as-is
+rebuild :: [String] -> String
+rebuild = concat
 
 main :: IO ()
 main = do
@@ -76,7 +69,10 @@ main = do
     n <- readLn
 
     content <- readFile "input.txt"
-    let result = unlines $ map (processLine n) (lines content)
+
+    let tokens = tokenize content
+        processed = processTokens n tokens
+        result = rebuild processed
 
     writeFile "output.txt" result
     putStrLn "\nГотово! Результат записано у output.txt"
