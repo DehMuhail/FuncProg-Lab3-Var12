@@ -2,11 +2,9 @@ module Tokenizer (tokenize, isWordChar) where
 
 import Data.Char (isLetter)
 
--- Allowed characters: letters, apostrophes, hyphens
 isWordChar :: Char -> Bool
 isWordChar c = isLetter c || c == '\'' || c == '-'
 
--- Split into: [words, punctuation, spaces]
 tokenize :: String -> [String]
 tokenize [] = []
 tokenize s@(c:cs)
