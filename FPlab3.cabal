@@ -18,8 +18,11 @@ common warnings
 executable FPlab3
     import:           warnings
     main-is:          Main.hs
-    -- other-modules:
+    other-modules:
+            Tokenizer
+            Filters
+            Cleaner
     -- other-extensions:
     build-depends:    base ^>=4.18.3.0
-    hs-source-dirs:   app
+    hs-source-dirs:   app src
     default-language: Haskell2010
